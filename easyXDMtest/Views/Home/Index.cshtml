@@ -1,0 +1,55 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+	var rpc = new easyXDM.Rpc({
+		remote: "http://brauhost:9000/easyXDM/cors/index.html"
+	},
+	{
+		remote: {
+			request: {},
+			myMethod: {}
+		},
+		 local: { // exposed methods
+            changeColor: function(){
+				changeColor();
+            }
+        }
+	});
+    $(document).ready(function () {
+        $("#btnClick").click(function () {
+			rpc.request({
+				url: "http://brauhost:9000/Api/Employees",
+				method: "GET"
+			}, function (response) {
+				var obj=JSON.parse(response.data);
+				alert(obj[0].Name);
+			});
+			
+			/*
+			 $.ajax({
+                url: "http://brauhost:9000/Api/Employees",
+                type: "GET",
+                contentType: "application/json;charset=utf-8",
+                //data: JSON.stringify($(this).serializeObject()),
+                statusCode: {
+                    200: function (response) {
+                        alert(response);
+                    }
+                }
+            });
+			*/
+			rpc.myMethod();
+		});
+    });
+	function changeColor()
+	{
+		$(".site-title").css("background-color","#ffcc00");
+	}
+</script> 
+
+<div id="body">
+    <p class="site-title"><a href="/">easyXDM test</a></p>
+    <input type=button value="Clickme" id=btnClick />
+</div>
+
